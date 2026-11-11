@@ -1,0 +1,6 @@
+{
+  "appId": "com.example.megruli",
+  "appName": "მეგრული",
+  "webDir": "docs",
+  "ios": { "contentInset": "always" }
+}

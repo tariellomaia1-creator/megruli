@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ka"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>მეგრულის გადამოწმება</title>
+<style>
+body{font:15px/1.5 system-ui,'Noto Sans Georgian',sans-serif;max-width:760px;margin:0 auto;padding:20px 16px;color:#12302b}
+h1{font-size:22px}h2{margin:28px 0 6px;font-size:17px;color:#0e6b5c}
+table{width:100%;border-collapse:collapse;margin:6px 0}td,th{border-bottom:1px solid #d5e2de;padding:6px 8px;text-align:left;vertical-align:top}
+input[type=text]{width:100%;padding:5px;font:inherit;box-sizing:border-box}
+textarea{width:100%;height:110px;font:inherit}button{font:inherit;padding:10px 16px;margin-top:10px}
+.p{color:#5d7a74;font-size:13px}
+</style></head><body>
+<h1>მეგრული შინაარსის გადამოწმება</h1>
+<p class="p">თითოეულ სტრიქონზე მონიშნე „სწორია“ ან ჩაწერე შესწორება. ბოლოს დააჭირე ღილაკს და მიღებული ტექსტი გამოგვიგზავნე.</p>
+<div id="o"></div><button id="b">შეჯამების გაკეთება</button><textarea id="r" placeholder="აქ გაჩნდება შეჯამება"></textarea>
+<script src="content.js"></script>
+<script>
+const rows=[];let h='';
+CONTENT.lessons.forEach(l=>{h+=`<h2>${l.title}</h2><table><tr><th>მეგრული</th><th>ქართული</th><th>სწორია</th><th>შესწორება</th></tr>`;
+ const seen=new Set();
+ l.cards.forEach(c=>{(c.rows||[]).forEach(r=>{const k=r.join('|');if(seen.has(k))return;seen.add(k);const i=rows.push({l:l.title,m:r[0],g:r[1]})-1;
+  h+=`<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td><input type="checkbox" data-i="${i}"></td><td><input type="text" data-c="${i}"></td></tr>`})
+  if(c.big){const i=rows.push({l:l.title,m:c.big,g:c.sub})-1;h+=`<tr><td><b>${c.big}</b></td><td>${c.sub}</td><td><input type="checkbox" data-i="${i}"></td><td><input type="text" data-c="${i}"></td></tr>`}});
+ h+='</table>'});
+document.getElementById('o').innerHTML=h;
+document.getElementById('b').onclick=()=>{
+ document.getElementById('r').value=rows.map((x,i)=>{const ok=document.querySelector(`[data-i="${i}"]`).checked,c=document.querySelector(`[data-c="${i}"]`).value.trim();
+  return `${x.l} | ${x.m} = ${x.g} | ${c?'შესწორება: '+c:ok?'სწორია':'გადაუმოწმებელია'}`}).join('\n')};
+</script></body></html>
